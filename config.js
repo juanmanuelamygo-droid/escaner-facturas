@@ -6,6 +6,10 @@ export const CONFIG = {
   // Correo de cada persona -> nombre de su carpeta.
   // Si alguien no está aquí, su carpeta tendrá su nombre completo de Microsoft 365.
   usuarios: {
+    "juanmanuel@pabloehijos.com": "JUAN MANUEL RUBIO",
+    "sergiorubio@pabloehijos.com": "SERGIO RUBIO",
+    "mario.rubio@pabloehijos.com": "MARIO RUBIO",
+    "pablorubio@pabloehijos.com": "PABLO RUBIO",
   },
 
   empresasPropias: ["PABLO GRUPO"],
