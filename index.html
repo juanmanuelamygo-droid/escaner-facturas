@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Escáner de facturas</title>
+  <meta name="theme-color" content="#1f4e79">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icono-192.png">
+  <link rel="apple-touch-icon" href="icono-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Escáner de facturas</h1>
+    <div id="usuario" class="usuario"></div>
+  </header>
+
+  <main>
+    <div id="aviso-prueba" class="aviso" hidden>
+      Modo prueba: falta configurar Microsoft 365, así que el PDF se descarga en este dispositivo.
+    </div>
+
+    <section id="pantalla-login" hidden>
+      <p>Entra con tu cuenta de la empresa para guardar las facturas en tu carpeta.</p>
+      <button id="btn-entrar" class="primario">Entrar con Microsoft</button>
+    </section>
+
+    <section id="pantalla-escaner" hidden>
+      <div class="destino">Se guardará en la carpeta: <strong id="carpeta"></strong></div>
+
+      <div class="botones-fotos">
+        <label class="boton primario">
+          📷 Hacer foto
+          <input id="in-camara" type="file" accept="image/*" capture="environment" hidden>
+        </label>
+        <label class="boton">
+          🖼️ Elegir imágenes
+          <input id="in-galeria" type="file" accept="image/*" multiple hidden>
+        </label>
+      </div>
+
+      <p id="sin-paginas" class="ayuda">Haz una foto por cada página. Si la factura tiene varias páginas, añádelas en orden.</p>
+      <ol id="paginas" class="paginas"></ol>
+
+      <div id="datos" hidden>
+        <div id="estado-ocr" class="estado"></div>
+        <label>Razón social
+          <input id="razon" type="text" autocomplete="off" placeholder="Ej.: DISTRIBUCIONES GARCÍA S.L.">
+        </label>
+        <label>Fecha de la factura
+          <input id="fecha" type="date">
+        </label>
+        <div class="nombre-final">Nombre del archivo:<br><strong id="nombre-final">—</strong></div>
+        <button id="btn-guardar" class="primario" disabled>Guardar en OneDrive</button>
+        <button id="btn-descartar" class="secundario">Descartar</button>
+      </div>
+
+      <div id="resultado" class="resultado" hidden></div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
