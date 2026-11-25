@@ -1,6 +1,6 @@
 # Escáner de facturas: guía de puesta en marcha
 
-Con esta app se hace una foto a la factura o al ticket. La app lee la razón social y la fecha, que la persona revisa, y guarda un PDF llamado `dd-mm-aaaa RAZON SOCIAL.pdf` en `FACTURAS SEVILLA/<año de la factura>/<persona>/`.
+Con esta app se hace una foto a la factura o al ticket. La app lee la razón social y la fecha, que la persona revisa, y guarda un PDF llamado `dd-mm-aaaa RAZON SOCIAL.pdf` en `FACTURAS SEVILLA/FACTURAS APLICACION <año>/<persona>/`.
 
 - La lectura (OCR) se hace en el propio móvil. Es **gratis** y no envía la imagen a ningún servicio externo.
 - Si la factura tiene varias páginas, se hacen varias fotos y todas acaban en un único PDF.
@@ -19,7 +19,7 @@ La carpeta ya existe: `Grupo PABLO > PABLO > SEVILLA > CONTABILIDAD (SILVIA) > F
 2. Comprueba que las 6 personas tienen permiso para **editar** en ella.
 3. Pulsa **Compartir > Copiar vínculo** y guárdalo. Lo necesitarás en el paso 4.
 
-La app crea sola las carpetas del año (`2026`, `2027`…) y la de cada persona dentro.
+La app crea sola las carpetas `FACTURAS APLICACION 2026`, `FACTURAS APLICACION 2027`… y la de cada persona dentro.
 
 ## 2. Publicar la app (gratis, con GitHub Pages)
 
@@ -71,6 +71,8 @@ Guarda los cambios. En un minuto estarán publicados.
 - **iPhone (Safari):** abre la URL de la app, pulsa **Compartir** y luego **Añadir a pantalla de inicio**.
 
 La primera vez, cada persona entra con su cuenta de la empresa. Ya no tendrá que volver a hacerlo.
+
+**Si sale el error AADSTS50020 ("identity provider 'live.com'")**: con ese correo también existe una cuenta personal de Microsoft, y el navegador ha entrado con ella. Hay que cerrar sesión en https://login.live.com, o usar una ventana privada, y al iniciar sesión elegir **Cuenta profesional o educativa**.
 
 ---
 

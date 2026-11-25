@@ -129,7 +129,7 @@ function actualizarNombre() {
   $("nombre-final").textContent = ok ? nombreArchivo(razon, fecha) + ".pdf" : "—";
   $("btn-guardar").disabled = !ok;
   const año = fecha ? fecha.slice(0, 4) : "(año de la factura)";
-  $("carpeta").textContent = `${año} / ${od.carpetaDelUsuario()}`;
+  $("carpeta").textContent = `FACTURAS APLICACION ${año} / ${od.carpetaDelUsuario()}`;
 }
 
 function crearPdf() {
