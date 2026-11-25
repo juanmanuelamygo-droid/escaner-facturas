@@ -1,5 +1,5 @@
 // Inicio de sesión con Microsoft 365 y subida a la carpeta común de OneDrive (Microsoft Graph).
-import { PublicClientApplication } from "https://esm.sh/@azure/msal-browser@3.27.0";
+import { PublicClientApplication, InteractionRequiredAuthError } from "https://esm.sh/@azure/msal-browser@3.27.0";
 import { CONFIG } from "./config.js";
 
 const SCOPES = ["User.Read", "Files.ReadWrite.All"];
@@ -42,12 +42,25 @@ export function carpetaDelUsuario() {
   return (mapa[email] || cuenta.name || email.split("@")[0]).replace(/[\\/:*?"<>|#%]/g, " ").trim();
 }
 
+// Mantener la sesión: MSAL guarda la sesión en el dispositivo (localStorage) y la renueva sola.
+// Si Microsoft pide volver a confirmar, se redirige con la cuenta ya elegida; mientras la sesión
+// de Microsoft siga activa ("Mantener la sesión iniciada"), no se vuelve a pedir la contraseña.
 async function token() {
   try {
     return (await msal.acquireTokenSilent({ scopes: SCOPES, account: cuenta })).accessToken;
-  } catch {
-    await msal.acquireTokenRedirect({ scopes: SCOPES, account: cuenta });
-    throw new Error("Redirigiendo para renovar la sesión…");
+  } catch (e) {
+    if (!(e instanceof InteractionRequiredAuthError)) throw e;
+    await msal.acquireTokenRedirect({ scopes: SCOPES, account: cuenta, loginHint: cuenta.username });
+    throw new Error("Renovando la sesión…");
+  }
+}
+
+/** Se llama al abrir la app: renueva la sesión antes de hacer fotos, para no perderlas a mitad. */
+export async function renovarSesion() {
+  try {
+    await token();
+  } catch (e) {
+    console.warn("No se pudo renovar la sesión ahora:", e);
   }
 }
 

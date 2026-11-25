@@ -30,6 +30,7 @@ async function arrancar() {
     btn.onclick = () => od.salir();
     $("usuario").append(btn);
     mostrarEscaner();
+    od.renovarSesion();
   } catch (e) {
     mostrarResultado(false, "No se pudo iniciar sesión: " + e.message);
     $("pantalla-escaner").hidden = false;
