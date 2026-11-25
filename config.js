@@ -22,6 +22,7 @@ export const CONFIG = {
     "sergiorubio@pabloehijos.com": "SERGIO RUBIO",
     "mario.rubio@pabloehijos.com": "MARIO RUBIO",
     "pablorubio@pabloehijos.com": "PABLO RUBIO",
+    "pablorubio@amadomiguel.com": "PABLO RUBIO", // invitado externo
   },
 
   // Vuestras propias razones sociales: la app las ignora al leer la factura
