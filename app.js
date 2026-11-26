@@ -7,6 +7,33 @@ const paginas = []; // { url (dataURL JPEG), ancho, alto }
 let ocrDePagina = null; // dataURL de la página que se leyó por última vez
 let worker = null;
 
+// ---------- Delegación ----------
+const DELEGACIONES = Object.keys(CONFIG.delegaciones || {});
+const disponible = (d) => od.modoPrueba || !!CONFIG.delegaciones[d];
+let delegacion = localStorage.getItem("delegacion");
+if (!DELEGACIONES.includes(delegacion) || !disponible(delegacion)) delegacion = DELEGACIONES.find(disponible) || "";
+
+function pintarDelegaciones() {
+  const cont = $("delegaciones");
+  cont.innerHTML = "";
+  for (const d of DELEGACIONES) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", String(d === delegacion));
+    b.disabled = !disponible(d);
+    b.textContent = d;
+    if (b.disabled) b.insertAdjacentHTML("beforeend", "<small>pendiente</small>");
+    b.onclick = () => {
+      delegacion = d;
+      localStorage.setItem("delegacion", d);
+      pintarDelegaciones();
+      actualizarNombre();
+    };
+    cont.append(b);
+  }
+}
+
 // ---------- Inicio ----------
 async function arrancar() {
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
@@ -39,6 +66,7 @@ async function arrancar() {
 
 function mostrarEscaner() {
   $("pantalla-escaner").hidden = false;
+  pintarDelegaciones();
   actualizarNombre();
 }
 
@@ -126,11 +154,11 @@ async function leerPrimeraPagina() {
 function actualizarNombre() {
   const razon = $("razon").value.trim();
   const fecha = $("fecha").value;
-  const ok = paginas.length && razon && fecha;
+  const ok = paginas.length && razon && fecha && delegacion;
   $("nombre-final").textContent = ok ? nombreArchivo(razon, fecha) + ".pdf" : "—";
   $("btn-guardar").disabled = !ok;
   const año = fecha ? fecha.slice(0, 4) : "(año de la factura)";
-  $("carpeta").textContent = `FACTURAS APLICACION ${año} / ${od.carpetaDelUsuario()}`;
+  $("carpeta").textContent = `${delegacion} › FACTURAS APLICACION ${año} › ${od.carpetaDelUsuario()}`;
 }
 
 function crearPdf() {
@@ -159,9 +187,9 @@ async function guardar() {
       a.download = base + ".pdf";
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 10000);
-      mostrarResultado(true, `Modo prueba: se ha descargado <strong>${escapar(base)}.pdf</strong>.`);
+      mostrarResultado(true, `Modo prueba: se ha descargado <strong>${escapar(base)}.pdf</strong> (destino: ${escapar(delegacion)}).`);
     } else {
-      const r = await od.subirPdf(pdf, base, $("fecha").value.slice(0, 4));
+      const r = await od.subirPdf(pdf, base, $("fecha").value.slice(0, 4), delegacion);
       mostrarResultado(true, `Guardado en <strong>${escapar(r.carpeta)}</strong> como <strong>${escapar(r.nombre)}</strong>. <a href="${r.url}" target="_blank" rel="noopener">Abrir</a>`);
     }
     limpiar();

@@ -10,9 +10,18 @@ export const CONFIG = {
   // Id. de directorio (inquilino) de vuestro Microsoft 365
   tenantId: "2c775744-906d-4c3a-a0c9-8c4f20d4d209",
 
-  // Enlace de la carpeta "FACTURAS SEVILLA" (botón "Compartir" > "Copiar vínculo").
+  // Carpeta de cada delegación (botón "Compartir" > "Copiar vínculo" sobre la carpeta que tiene dentro los años).
   // Dentro, la app guarda en  FACTURAS APLICACION <año>/<persona>/  y crea las carpetas que falten.
-  carpetaComunUrl: "https://pabloehijos-my.sharepoint.com/:f:/p/sergiorubio/IgCNiE7eG3lCS41y6GnWCnmNASWZYx4fAkRSu7TDshXMMP4?e=3kirHQ",
+  // Una delegación con el enlace vacío aparece en la app como "pendiente" y no se puede elegir.
+  delegaciones: {
+    SEVILLA: "https://pabloehijos-my.sharepoint.com/:f:/p/sergiorubio/IgCNiE7eG3lCS41y6GnWCnmNASWZYx4fAkRSu7TDshXMMP4?e=3kirHQ",
+    // Barcelona: el enlace es de la carpeta 2026 (FACTURAS BARCELONA › 2026); en enero cambiar al de 2027.
+    BARCELONA: "https://pabloehijos-my.sharepoint.com/:f:/p/sergiorubio/IgBSq8mRSvHPRZSCZaz-z3h2AVtTd9ZwpTTzca73Wa2lQxM?e=Z28kON",
+    // Madrid: el enlace es de la carpeta 2026 (FACTURAS MADRID › 2026); en enero cambiar al de 2027.
+    MADRID: "https://pabloehijos-my.sharepoint.com/:f:/p/sergiorubio/IgCBEMtT9vTIRLK90J6kdCC0AS_PsInbAgeQ3k1dZDFUWJk?e=jxr6Kz",
+    // Bruselas: pendiente del enlace de BRUSELAS › 2026 › FACTURAS BRUSELAS (en enero, el de 2027).
+    BRUSELAS: "",
+  },
 
   // Nombre de la carpeta de cada persona, según su correo de empresa.
   // Si alguien no está en la lista, se usa su nombre completo de Microsoft 365.
@@ -29,5 +38,6 @@ export const CONFIG = {
   // (porque aparecéis como cliente y no son el proveedor). Basta con una palabra clave.
   empresasPropias: [
     "PABLO GRUPO",
+    "AMYGO",
   ],
 };

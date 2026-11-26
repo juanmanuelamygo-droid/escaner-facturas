@@ -78,15 +78,20 @@ async function graphJson(ruta, opciones) {
   return r.json();
 }
 
-let raiz = null; // { driveId, id }
-async function carpetaComun() {
-  if (raiz) return raiz;
-  if (!CONFIG.carpetaComunUrl) throw new Error("Falta carpetaComunUrl en config.js");
-  const b64 = btoa(unescape(encodeURIComponent(CONFIG.carpetaComunUrl)))
+const raices = {}; // delegación -> { driveId, id }
+async function carpetaDelegacion(delegacion) {
+  if (raices[delegacion]) return raices[delegacion];
+  const url = CONFIG.delegaciones?.[delegacion];
+  if (!url) throw new Error(`Falta el enlace de la carpeta de ${delegacion} en config.js`);
+  const b64 = btoa(unescape(encodeURIComponent(url)))
     .replace(/=+$/, "").replace(/\//g, "_").replace(/\+/g, "-");
-  const item = await graphJson(`/shares/u!${b64}/driveItem`);
-  raiz = { driveId: item.parentReference.driveId, id: item.id };
-  return raiz;
+  const r = await graph(`/shares/u!${b64}/driveItem`);
+  if (r.status === 403 || r.status === 404)
+    throw new Error(`No tienes acceso a la carpeta de ${delegacion}. Pide al dueño que te la comparta con permiso de edición.`);
+  if (!r.ok) throw new Error(`OneDrive respondió ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  const item = await r.json();
+  raices[delegacion] = { driveId: item.parentReference.driveId, id: item.id };
+  return raices[delegacion];
 }
 
 /** Devuelve el id de la subcarpeta `nombre` dentro de `padreId`, creándola si no existe. */
@@ -102,13 +107,13 @@ async function asegurarCarpeta(driveId, padreId, nombre) {
   return nueva.id;
 }
 
-/** Sube el PDF a <año>/<persona>/. Si ya existe un archivo con ese nombre, añade _2, _3… */
-export async function subirPdf(blob, nombreBase, año) {
-  const { driveId, id: raizId } = await carpetaComun();
+/** Sube el PDF a <delegación>/FACTURAS APLICACION <año>/<persona>/. Si ya existe un archivo con ese nombre, añade _2, _3… */
+export async function subirPdf(blob, nombreBase, año, delegacion) {
+  const { driveId, id: raizId } = await carpetaDelegacion(delegacion);
   const persona = carpetaDelUsuario();
   const añoId = await asegurarCarpeta(driveId, raizId, `FACTURAS APLICACION ${año}`);
   const carpetaId = await asegurarCarpeta(driveId, añoId, persona);
-  const carpeta = `FACTURAS APLICACION ${año} / ${persona}`;
+  const carpeta = `${delegacion} › FACTURAS APLICACION ${año} › ${persona}`;
   for (let n = 1; n < 50; n++) {
     const nombre = `${nombreBase}${n > 1 ? "_" + n : ""}.pdf`;
     const r = await graph(

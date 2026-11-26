@@ -41,3 +41,11 @@ input[type=text], input[type=date] {
 .resultado.ok { background: #ecfdf3; border: 1px solid #75e0a7; }
 .resultado.error { background: #fef3f2; border: 1px solid #fda29b; }
 .resultado a { color: var(--azul); font-weight: 600; }
+
+.etiqueta { font-weight: 600; margin: 14px 0 6px; }
+.delegaciones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.delegaciones button { padding: 11px 6px; font-size: 15px; }
+.delegaciones button[aria-checked="true"] { background: var(--azul); color: #fff; border-color: var(--azul); }
+.delegaciones button small { display: block; font-weight: 400; font-size: 12px; }
+.destino { margin-top: 14px; font-size: 14px; }
+.destino strong { font-size: 16px; }

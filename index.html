@@ -30,8 +30,6 @@
     </section>
 
     <section id="pantalla-escaner" hidden>
-      <div class="destino">Se guardará en la carpeta: <strong id="carpeta"></strong></div>
-
       <div class="botones-fotos">
         <label class="boton primario">
           📷 Hacer foto
@@ -54,6 +52,9 @@
         <label>Fecha de la factura
           <input id="fecha" type="date">
         </label>
+        <div class="etiqueta">Delegación</div>
+        <div id="delegaciones" class="delegaciones" role="radiogroup" aria-label="Delegación"></div>
+        <div class="destino">Se guardará en:<br><strong id="carpeta"></strong></div>
         <div class="nombre-final">Nombre del archivo:<br><strong id="nombre-final">—</strong></div>
         <button id="btn-guardar" class="primario" disabled>Guardar en OneDrive</button>
         <button id="btn-descartar" class="secundario">Descartar</button>
