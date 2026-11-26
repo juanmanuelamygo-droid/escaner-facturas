@@ -19,8 +19,11 @@ export const CONFIG = {
     BARCELONA: "https://pabloehijos-my.sharepoint.com/:f:/p/sergiorubio/IgBSq8mRSvHPRZSCZaz-z3h2AVtTd9ZwpTTzca73Wa2lQxM?e=Z28kON",
     // Madrid: el enlace es de la carpeta 2026 (FACTURAS MADRID › 2026); en enero cambiar al de 2027.
     MADRID: "https://pabloehijos-my.sharepoint.com/:f:/p/sergiorubio/IgCBEMtT9vTIRLK90J6kdCC0AS_PsInbAgeQ3k1dZDFUWJk?e=jxr6Kz",
-    // Bruselas: pendiente del enlace de BRUSELAS › 2026 › FACTURAS BRUSELAS (en enero, el de 2027).
-    BRUSELAS: "",
+    // Bruselas: enlace de BRUSELAS › 2026, y dentro se usa la carpeta FACTURAS BRUSELAS; en enero cambiar al de 2027.
+    BRUSELAS: {
+      url: "https://pabloehijos-my.sharepoint.com/:f:/p/sergiorubio/IgCmcOUOcF_7SbZ1h1hmX6TpAeIh4LhMtAg1NHneHrnE2u4?e=t5wOZ9",
+      ruta: "FACTURAS BRUSELAS",
+    },
   },
 
   // Nombre de la carpeta de cada persona, según su correo de empresa.

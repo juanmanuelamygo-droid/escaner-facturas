@@ -9,7 +9,7 @@ let worker = null;
 
 // ---------- Delegación ----------
 const DELEGACIONES = Object.keys(CONFIG.delegaciones || {});
-const disponible = (d) => od.modoPrueba || !!CONFIG.delegaciones[d];
+const disponible = (d) => od.modoPrueba || !!(CONFIG.delegaciones[d]?.url ?? CONFIG.delegaciones[d]);
 let delegacion = localStorage.getItem("delegacion");
 if (!DELEGACIONES.includes(delegacion) || !disponible(delegacion)) delegacion = DELEGACIONES.find(disponible) || "";
 

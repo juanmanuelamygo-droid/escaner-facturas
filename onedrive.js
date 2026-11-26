@@ -81,7 +81,10 @@ async function graphJson(ruta, opciones) {
 const raices = {}; // delegación -> { driveId, id }
 async function carpetaDelegacion(delegacion) {
   if (raices[delegacion]) return raices[delegacion];
-  const url = CONFIG.delegaciones?.[delegacion];
+  // Cada delegación es un enlace, o { url, ruta } para entrar en una subcarpeta del enlace.
+  const conf = CONFIG.delegaciones?.[delegacion];
+  const url = typeof conf === "string" ? conf : conf?.url;
+  const ruta = typeof conf === "object" ? conf?.ruta : "";
   if (!url) throw new Error(`Falta el enlace de la carpeta de ${delegacion} en config.js`);
   const b64 = btoa(unescape(encodeURIComponent(url)))
     .replace(/=+$/, "").replace(/\//g, "_").replace(/\+/g, "-");
@@ -89,8 +92,15 @@ async function carpetaDelegacion(delegacion) {
   if (r.status === 403 || r.status === 404)
     throw new Error(`No tienes acceso a la carpeta de ${delegacion}. Pide al dueño que te la comparta con permiso de edición.`);
   if (!r.ok) throw new Error(`OneDrive respondió ${r.status}: ${(await r.text()).slice(0, 200)}`);
-  const item = await r.json();
-  raices[delegacion] = { driveId: item.parentReference.driveId, id: item.id };
+  let item = await r.json();
+  const driveId = item.parentReference.driveId;
+  if (ruta) {
+    const ruta64 = ruta.split("/").map(encodeURIComponent).join("/");
+    const sub = await graph(`/drives/${driveId}/items/${item.id}:/${ruta64}`);
+    if (!sub.ok) throw new Error(`No encuentro la carpeta "${ruta}" en ${delegacion} (${sub.status})`);
+    item = await sub.json();
+  }
+  raices[delegacion] = { driveId, id: item.id };
   return raices[delegacion];
 }
 
